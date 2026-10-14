@@ -34,21 +34,22 @@ class HeaderCaptureMiddleware:
             challenge_header.reset(token)
 
 
-# Allow requests from the Render hostname
+# Configure MCP transport security
 security = TransportSecuritySettings(
     enable_dns_rebinding_protection=False
 )
 
 
-# Initialize the MCP server
+# Initialize MCP server
 mcp = FastMCP(
     "Exam Challenge Server",
     stateless_http=True,
     json_response=True,
+    transport_security=security,
 )
 
 
-# MCP tool: solve the challenge
+# MCP tool
 @mcp.tool()
 def solve_challenge() -> str:
     """Return the first 16 hexadecimal characters of the challenge hash."""
@@ -67,7 +68,5 @@ def solve_challenge() -> str:
 
 # Create the HTTP application
 app = HeaderCaptureMiddleware(
-    mcp.streamable_http_app(
-        transport_security=security
-    )
+    mcp.streamable_http_app()
 )
