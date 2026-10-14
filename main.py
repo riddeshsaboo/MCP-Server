@@ -36,10 +36,7 @@ class HeaderCaptureMiddleware:
 
 # Allow requests from the Render hostname
 security = TransportSecuritySettings(
-    allowed_hosts=[
-        "mcp-server-n8dh.onrender.com",
-        "mcp-server-n8dh.onrender.com:*",
-    ]
+    enable_dns_rebinding_protection=False
 )
 
 
